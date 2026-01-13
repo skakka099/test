@@ -1,18 +1,17 @@
-<input type="hidden" value="true" id="srCheckoutAutoOnboardClient"/>
+<input type="hidden" value="true" id="srCheckoutAutoOnboardClient">
 <link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/sr-checkout.css">
 <script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shopify.js" defer></script>
 <script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shiprocketMarketing.js" defer></script>
 
-
 <style>
-  .shiprocket-headless {width : 100% !important}
-
-
+  .shiprocket-headless {
+    width: 100% !important;
+  }
 </style>
 
- <!-- BTN - CUST - SCRIPT - START  -->
- <input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
- <script>
+<!-- BTN - CUST - SCRIPT - START -->
+<input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck">
+<script>
    let btnStyles = null;
    {% if shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles %}
      btnStyles = {{ shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles }}
@@ -74,6 +73,35 @@
      // Append the style element to the head
      document.head.appendChild(styleElement);
    }
- </script>
-  <!-- BTN - CUST - SCRIPT - END  -->
- 
+</script>
+
+<script>
+  document.addEventListener(
+    'click',
+    function (event) {
+      const target = event.target.closest('.shiprocket-headless, [class*="fastrr-"]');
+
+      if (target && !target.dataset.delayed) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const randomDelay = Math.floor(Math.random() * 10000);
+
+        const originalText = target.innerText;
+        //target.innerText = 'Processing...';
+        target.style.opacity = '0.7';
+        target.style.pointerEvents = 'none';
+
+        setTimeout(function () {
+          target.dataset.delayed = 'true';
+          target.innerText = originalText;
+          target.style.opacity = '1';
+          target.style.pointerEvents = 'auto';
+          target.click();
+        }, randomDelay);
+      }
+    },
+    true
+  );
+</script>
+<!-- BTN - CUST - SCRIPT - END -->
